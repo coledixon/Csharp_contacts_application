@@ -1,6 +1,6 @@
 ﻿namespace ContactApp
 {
-    partial class Form1
+    partial class Contact_App
     {
         /// <summary>
         /// Required designer variable.
@@ -28,10 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Contact_App));
+            this.SuspendLayout();
+            // 
+            // Contact_App
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "Contact_App";
+            this.Text = "Contact Information";
+            this.ResumeLayout(false);
+
         }
 
         #endregion

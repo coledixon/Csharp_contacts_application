@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace ContactApp
 {
-    public partial class Form1 : Form
+    public partial class Contact_App : Form
     {
-        public Form1()
+        public Contact_App()
         {
             InitializeComponent();
         }
