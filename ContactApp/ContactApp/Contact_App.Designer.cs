@@ -406,11 +406,11 @@
             this.btnClear.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnClear.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnClear.BackgroundImage = global::ContactApp.Properties.Resources.clear;
+            this.btnClear.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnClear.Location = new System.Drawing.Point(428, 422);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(95, 40);
             this.btnClear.TabIndex = 21;
-            this.btnClear.Text = "CLEAR";
             this.btnClear.UseVisualStyleBackColor = false;
             // 
             // lblLoadInfo
