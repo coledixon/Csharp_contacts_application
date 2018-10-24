@@ -8,3 +8,13 @@ C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp\ContactApp\o
 C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp\ContactApp\obj\Debug\ContactApp.csproj.CoreCompileInputs.cache
 C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp\ContactApp\obj\Debug\ContactApp.exe
 C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp\ContactApp\obj\Debug\ContactApp.pdb
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\bin\Debug\ContactApp.exe.config
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\bin\Debug\ContactApp.exe
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\bin\Debug\ContactApp.pdb
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Debug\ContactApp.csprojAssemblyReference.cache
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Debug\ContactApp.Contact_App.resources
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Debug\ContactApp.Properties.Resources.resources
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Debug\ContactApp.csproj.GenerateResource.cache
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Debug\ContactApp.csproj.CoreCompileInputs.cache
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Debug\ContactApp.exe
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Debug\ContactApp.pdb
