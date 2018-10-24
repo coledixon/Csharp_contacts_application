@@ -26,7 +26,7 @@ GO
 			JOIN inserted i (NOLOCK) ON a.first_name = i.first_name AND a.last_name = i.last_name)
 		BEGIN
 			-- update existing records
-			UPDATE exist SET first_name = i.first_name, last_name = i.last_name
+			UPDATE exist SET first_name = i.first_name, last_name = i.last_name, upd_date = GETDATE()
 				FROM inserted i
 				JOIN contact_main exist (NOLOCK) ON exist.contact_id = i.contact_id
 
@@ -49,7 +49,7 @@ GO
 		ELSE BEGIN
 			-- create new records
 			INSERT contact_main
-			SELECT first_name, last_name FROM inserted i
+			SELECT first_name, last_name, GETDATE(), null FROM inserted i
 
 				IF @@ROWCOUNT > 0
 				BEGIN
@@ -85,3 +85,30 @@ GO
 			SELECT 'FAIL', @retval retval, @errmess err
 			RETURN
 	END
+
+IF OBJECT_ID('dbo.trDEL_vcontact_data_all') is not null DROP TRIGGER [dbo].[trDEL_vcontact_data_all] 
+GO
+
+	CREATE TRIGGER [dbo].[trDEL_vcontact_data_all] ON [dbo].[vcontact_data_all]
+	INSTEAD OF DELETE
+	AS
+	BEGIN
+		DECLARE @contact_id int, @retval int, @errmess varchar(MAX)
+
+		-- create temp table
+		SELECT * INTO #tmp_audit FROM deleted
+
+		-- exec spwrite_audit
+			-- eval @retval
+			-- cascade
+
+		SUCCESS:
+			SELECT 'SUCCESS'
+			RETURN
+
+		ERROR:
+			SELECT 'FAIL', @retval retval, @errmess err
+			RETURN
+	END
+
+GO
