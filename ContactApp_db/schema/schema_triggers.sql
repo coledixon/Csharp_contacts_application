@@ -5,6 +5,8 @@ GO
 
 
 /* --- TRIGGERS --- */
+-- TO DO
+-- delete trigger (similar to cascade functionality)
 
 -- drop and create in case of master schema changes
 IF OBJECT_ID('dbo.trINSUPD_vcontact_data_all') is not null DROP TRIGGER [dbo].[trINSUPD_vcontact_data_all] 

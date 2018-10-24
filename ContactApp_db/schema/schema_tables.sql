@@ -19,18 +19,23 @@ BEGIN
 			[contact_id] int IDENTITY(1,1),
 			[first_name] varchar(50) not null,
 			[last_name] varchar(50) not null,
+			[create_date] datetime not null,
+			[upd_date] datetime null,
 		PRIMARY KEY NONCLUSTERED 
 		(
 			[contact_id] ASC
 		) ON [PRIMARY]
 	)
+
+		ALTER TABLE contact_main
+			ADD CONSTRAINT def_createDate DEFAULT (GETDATE()) FOR [create_date]
 END
 
 GO
 
 IF OBJECT_ID('dbo.contact_address') is null
 BEGIN
-	-- contact address
+	-- contact address (main only)
 	CREATE TABLE contact_address (
 			[contact_id] int not null,
 			[address] varchar(200) null,
@@ -94,6 +99,62 @@ BEGIN
 	)
 
 		CREATE UNIQUE NONCLUSTERED INDEX natKey_website ON contact_website (
+			[contact_id]
+		)
+END
+
+GO
+
+
+/* --- AUDIT TABLES --- */
+
+IF OBJECT_ID('dbo.audit_contact') is null
+BEGIN
+	-- audit deleted contacts
+	CREATE TABLE audit_contact(
+			[audit_key] int IDENTITY(1,1), 
+			[contact_id] int not null,
+			[first_name] varchar(50) not null,
+			[last_name] varchar(50) not null,
+			[del_date] datetime not null,
+		PRIMARY KEY NONCLUSTERED 
+		(
+			[audit_key] ASC
+		) ON [PRIMARY]
+	)
+			
+		ALTER TABLE audit_contact
+			ADD CONSTRAINT def_delDate DEFAULT (GETDATE()) FOR [del_date]
+
+		CREATE UNIQUE NONCLUSTERED INDEX natKey_auditContact ON audit_contact (
+			[audit_key],
+			[contact_id]
+		)
+END
+
+GO
+
+IF OBJECT_ID('dbo.audit_info') is null
+BEGIN
+	-- audit deleted contact's associated info
+	CREATE TABLE audit_info(
+			[audit_key] int not null, 
+			[contact_id] int not null,
+			[address] varchar(200) null,
+			[city] varchar(50) null,
+			[state] varchar(2) null,
+			[zip] int null,
+			[phone_home] varchar(14) null,
+			[phone_cell] varchar(14) null,
+			[phone_work] varchar(14) null,
+			[email_personal] varchar(50) null,
+			[email_work] varchar(50) null,
+			[website] varchar(MAX) null,
+			[github] varchar(MAX) null
+	)	
+
+		CREATE UNIQUE NONCLUSTERED INDEX natKey_auditInfo ON audit_info (
+			[audit_key],
 			[contact_id]
 		)
 END
