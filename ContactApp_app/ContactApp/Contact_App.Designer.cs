@@ -98,10 +98,12 @@
             // 
             // txtContact
             // 
+            this.txtContact.CausesValidation = false;
             this.txtContact.Location = new System.Drawing.Point(201, 21);
             this.txtContact.Name = "txtContact";
             this.txtContact.Size = new System.Drawing.Size(103, 22);
             this.txtContact.TabIndex = 1;
+            this.txtContact.ReadOnlyChanged += new System.EventHandler(this.txtContact_ReadOnlyChanged);
             this.txtContact.Leave += new System.EventHandler(this.txtContact_LostFocus);
             // 
             // txtLname
@@ -237,6 +239,7 @@
             // txtState
             // 
             this.txtState.Location = new System.Drawing.Point(357, 147);
+            this.txtState.MaxLength = 2;
             this.txtState.Name = "txtState";
             this.txtState.Size = new System.Drawing.Size(50, 22);
             this.txtState.TabIndex = 6;
@@ -253,6 +256,7 @@
             // txtPhoneC
             // 
             this.txtPhoneC.Location = new System.Drawing.Point(217, 227);
+            this.txtPhoneC.MaxLength = 8;
             this.txtPhoneC.Name = "txtPhoneC";
             this.txtPhoneC.Size = new System.Drawing.Size(96, 22);
             this.txtPhoneC.TabIndex = 11;
@@ -270,6 +274,7 @@
             // txtPhoneH
             // 
             this.txtPhoneH.Location = new System.Drawing.Point(217, 199);
+            this.txtPhoneH.MaxLength = 8;
             this.txtPhoneH.Name = "txtPhoneH";
             this.txtPhoneH.Size = new System.Drawing.Size(96, 22);
             this.txtPhoneH.TabIndex = 9;
@@ -287,6 +292,7 @@
             // txtZip
             // 
             this.txtZip.Location = new System.Drawing.Point(449, 147);
+            this.txtZip.MaxLength = 5;
             this.txtZip.Name = "txtZip";
             this.txtZip.Size = new System.Drawing.Size(74, 22);
             this.txtZip.TabIndex = 7;
@@ -303,6 +309,7 @@
             // txtAreaH
             // 
             this.txtAreaH.Location = new System.Drawing.Point(165, 199);
+            this.txtAreaH.MaxLength = 3;
             this.txtAreaH.Name = "txtAreaH";
             this.txtAreaH.Size = new System.Drawing.Size(33, 22);
             this.txtAreaH.TabIndex = 8;
@@ -311,6 +318,7 @@
             // txtAreaC
             // 
             this.txtAreaC.Location = new System.Drawing.Point(165, 227);
+            this.txtAreaC.MaxLength = 3;
             this.txtAreaC.Name = "txtAreaC";
             this.txtAreaC.Size = new System.Drawing.Size(33, 22);
             this.txtAreaC.TabIndex = 10;
@@ -364,6 +372,7 @@
             // txtAreaW
             // 
             this.txtAreaW.Location = new System.Drawing.Point(376, 215);
+            this.txtAreaW.MaxLength = 3;
             this.txtAreaW.Name = "txtAreaW";
             this.txtAreaW.Size = new System.Drawing.Size(33, 22);
             this.txtAreaW.TabIndex = 12;
@@ -372,6 +381,7 @@
             // txtPhoneW
             // 
             this.txtPhoneW.Location = new System.Drawing.Point(428, 215);
+            this.txtPhoneW.MaxLength = 8;
             this.txtPhoneW.Name = "txtPhoneW";
             this.txtPhoneW.Size = new System.Drawing.Size(96, 22);
             this.txtPhoneW.TabIndex = 13;

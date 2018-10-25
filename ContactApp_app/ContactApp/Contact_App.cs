@@ -25,6 +25,12 @@ namespace ContactApp
         #region button events
         private void btnNext_Click(object sender, EventArgs e)
         {
+            foreach (Control ctl in this.Controls) // clear all text elements on gen'in new contactid
+            {
+                if (ctl.GetType() == typeof(TextBox))
+                    ((TextBox)ctl).Text = String.Empty;
+            }
+
             txtContact.Text = data.GetNextContactId().ToString();
             txtContact.ReadOnly = true; // set to readonly
         }
@@ -57,7 +63,17 @@ namespace ContactApp
         private void btnClear_Click(object sender, EventArgs e)
         {
             // build form clear functionality
-            txtContact.ReadOnly = false;
+            DialogResult _res = MessageBox.Show("Do you want to clear the form?", "CLEAR", MessageBoxButtons.YesNo);
+            if (_res == DialogResult.Yes)
+            {
+                foreach (Control ctl in this.Controls) // clear all text elements on gen'in new contactid
+                {
+                    if (ctl.GetType() == typeof(TextBox))
+                        ((TextBox)ctl).Text = String.Empty;
+                }
+                txtContact.ReadOnly = false; // reset readonly
+            }
+            else { return; }
         }
         #endregion
 
@@ -65,6 +81,10 @@ namespace ContactApp
         private void txtContact_LostFocus(object sender, EventArgs e)
         {
             // fire Select() txtContact.text
+            if (txtContact.Text.Length > 0)
+            {
+                data.Select();
+            }
         }
 
         private void txtFname_LostFocus(object sender, EventArgs e)
@@ -108,7 +128,7 @@ namespace ContactApp
         {
             Regex _reg = new Regex("[-. ]"); // remove - and . chars
             string _parsed = "(" + areaCode + ")" + _reg.Replace(phoneNumber, "");
-            if (string.IsNullOrEmpty(phoneNumber)) { _parsed = null; } // eliminate empty () on parse
+            if (string.IsNullOrEmpty(phoneNumber)) { _parsed = ""; } // eliminate empty () on parse
             return _parsed;
         }
 
@@ -129,5 +149,10 @@ namespace ContactApp
         }
         #endregion
 
+        private void txtContact_ReadOnlyChanged(object sender, EventArgs e)
+        {
+            if (txtContact.ReadOnly) { btnAdd.Enabled = false; }
+            else { btnAdd.Enabled = true; }
+        }
     }
 }
