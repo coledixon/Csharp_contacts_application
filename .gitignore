@@ -1,1 +1,3 @@
 .vs
+ContactApp_db/debug_wrk.sql
+ContactApp_db/sp_String_or_binary_data_truncated.sql
