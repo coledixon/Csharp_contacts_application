@@ -45,6 +45,12 @@ GO
 			UPDATE exist SET website = i.website, github = i.github
 				FROM inserted i
 				JOIN contact_website exist (NOLOCK) ON exist.contact_id = i.contact_id
+			
+			IF @@ROWCOUNT = 0
+			BEGIN
+				SELECT @retval = -1, @errmess = 'NO RECORD(S) UPDATED IN trINSUPD_vcontact_data_all'
+				GOTO ERROR
+			END
 		END
 		ELSE BEGIN
 			-- create new records
@@ -74,10 +80,10 @@ GO
 			SELECT @contact_id, website, github FROM inserted i 
 
 				SELECT @retval = 1, @errmess = NULL -- assume success if reach this point
-				GOTO SUCCESS
+				GOTO SPEND
 		END
 
-		SUCCESS:
+		SPEND:
 			SELECT 'SUCCESS'
 			RETURN
 
@@ -85,6 +91,9 @@ GO
 			SELECT 'FAIL', @retval retval, @errmess err
 			RETURN
 	END
+
+GO
+
 
 IF OBJECT_ID('dbo.trDEL_vcontact_data_all') is not null DROP TRIGGER [dbo].[trDEL_vcontact_data_all] 
 GO
@@ -98,12 +107,23 @@ GO
 		-- create temp table
 		SELECT * INTO #tmp_audit FROM deleted
 
-		-- exec spwrite_audit
-			-- eval @retval
-			-- cascade
+		IF @@ROWCOUNT > 0
+		BEGIN
+			EXEC spwrite_audit @retval = @retval OUTPUT, @errmess = @errmess OUTPUT
 
-		SUCCESS:
-			SELECT 'SUCCESS'
+			IF (COALESCE(@retval,0) <= 0)
+			BEGIN
+				SELECT @retval = COALESCE(@retval,-1), @errmess = COALESCE(@errmess, 'ERROR RUNNING spwrite_audit')
+				GOTO ERROR
+			END
+			ELSE BEGIN
+				SELECT @retval = COALESCE(@retval,1)
+				GOTO SPEND
+			END
+		END
+
+		SPEND:
+			SELECT 'SUCCESS', @retval retval
 			RETURN
 
 		ERROR:
