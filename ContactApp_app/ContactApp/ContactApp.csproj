@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Classes\contactData.cs" />
     <Compile Include="Classes\contactExt.cs" />
+    <Compile Include="Classes\contactProp.cs" />
     <Compile Include="Contact_App.cs">
       <SubType>Form</SubType>
     </Compile>

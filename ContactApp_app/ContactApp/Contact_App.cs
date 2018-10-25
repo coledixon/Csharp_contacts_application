@@ -19,9 +19,10 @@ namespace ContactApp
             InitializeComponent();
         }
 
-        // INSTANTIATE CLASSES
-        contactData data = new contactData(); // data class
+        // INSTANTIATE CLASS(ES)
+        contactData data = new contactData(); // data  class
         contactExt ext = new contactExt(); // method class
+        contactProp prop = new contactProp(); // properties class
 
         // FORM EVENTS
         #region button events
@@ -40,11 +41,11 @@ namespace ContactApp
         private void btnAdd_Click(object sender, EventArgs e)
         {
             SetProps(); // enaure all class values are set
-            bool isSuccess = data.Insert(data);
+            bool isSuccess = data.Insert(prop);
 
             if (isSuccess)
             {
-                MessageBox.Show("New contact record added for " + data.FirstName + " " + data.LastName);
+                MessageBox.Show("New contact record added for " + prop.FirstName + " " + prop.LastName);
                 txtContact.ReadOnly = false;
             }
             else { MessageBox.Show("Error saving record to db_contacts"); }
@@ -109,19 +110,19 @@ namespace ContactApp
         // set properties
         private void SetProps()
         {
-            data.FirstName = txtFname.Text;
-            data.LastName = txtLname.Text;
-            data.Address = txtAddress.Text;
-            data.City = txtCity.Text;
-            data.State = txtState.Text.ToUpper();
-            data.Zip = Convert.ToInt32(txtZip.Text);
-            data.PhoneHome = ext.parsePhoneNumber(txtAreaH.Text, txtPhoneH.Text);
-            data.PhoneCell = ext.parsePhoneNumber(txtAreaC.Text, txtPhoneC.Text);
-            data.PhoneWork = ext.parsePhoneNumber(txtAreaW.Text, txtPhoneW.Text);
-            data.EmailPersonal = ext.parseEmail(txtEmailP.Text);
-            data.EmailWork = ext.parseEmail(txtEmailW.Text);
-            data.Website = ext.parseWebsite(txtWebsite.Text, false);
-            data.Github = ext.parseWebsite(txtGitHub.Text, true);
+            prop.FirstName = txtFname.Text;
+            prop.LastName = txtLname.Text;
+            prop.Address = txtAddress.Text;
+            prop.City = txtCity.Text;
+            prop.State = txtState.Text.ToUpper();
+            prop.Zip = Convert.ToInt32(txtZip.Text);
+            prop.PhoneHome = ext.parsePhoneNumber(txtAreaH.Text, txtPhoneH.Text);
+            prop.PhoneCell = ext.parsePhoneNumber(txtAreaC.Text, txtPhoneC.Text);
+            prop.PhoneWork = ext.parsePhoneNumber(txtAreaW.Text, txtPhoneW.Text);
+            prop.EmailPersonal = ext.parseEmail(txtEmailP.Text);
+            prop.EmailWork = ext.parseEmail(txtEmailW.Text);
+            prop.Website = ext.parseWebsite(txtWebsite.Text, false);
+            prop.Github = ext.parseWebsite(txtGitHub.Text, true);
         }
 
         private void txtContact_ReadOnlyChanged(object sender, EventArgs e)
