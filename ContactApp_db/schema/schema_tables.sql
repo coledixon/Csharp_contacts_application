@@ -16,7 +16,7 @@ IF OBJECT_ID('dbo.contact_main') is null
 BEGIN
 	-- master contact table
 	CREATE TABLE contact_main (
-			[contact_id] int IDENTITY(1,1),
+			[contact_id] int /* IDENTITY(1,1) REMOVED handling with proc */,
 			[first_name] varchar(50) not null,
 			[last_name] varchar(50) not null,
 			[create_date] datetime not null,

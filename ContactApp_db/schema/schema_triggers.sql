@@ -19,11 +19,11 @@ GO
 		DECLARE @contact_id int, @retval int, @errmess varchar(MAX)
 
 		-- create temp table
-		SELECT * INTO #vcontact_data_all FROM inserted
+		SELECT inserted.* INTO #vcontact_data_all FROM inserted
 
-		-- handle insert / update logic (assuming no entries with same first/last name combination)
+		-- handle insert / update logic
 		IF EXISTS(SELECT 1 FROM vcontact_data_all a
-			JOIN inserted i (NOLOCK) ON a.first_name = i.first_name AND a.last_name = i.last_name)
+			JOIN inserted i (NOLOCK) ON a.contact_id = i.contact_id)
 		BEGIN
 			-- update existing records
 			UPDATE exist SET first_name = i.first_name, last_name = i.last_name, upd_date = GETDATE()
@@ -53,31 +53,22 @@ GO
 			END
 		END
 		ELSE BEGIN
+
 			-- create new records
 			INSERT contact_main
-			SELECT first_name, last_name, GETDATE(), null FROM inserted i
-
-				IF @@ROWCOUNT > 0
-				BEGIN
-					-- get newly created contact_id
-					SELECT @contact_id = MAX(contact_id) FROM contact_main
-				END
-				ELSE BEGIN
-					SELECT @retval = -1, @errmess = 'FAILURE CREATING contact_main RECORD'
-					GOTO ERROR
-				END
+			SELECT contact_id, first_name, last_name, GETDATE(), null FROM inserted i
 
 			INSERT contact_address
-			SELECT @contact_id, address, city, state, zip FROM inserted i 
-			
+			SELECT contact_id, address, city, state, zip FROM inserted i 
+
 			INSERT contact_phone
-			SELECT @contact_id, phone_home, phone_cell, phone_work FROM inserted i 
-			
+			SELECT contact_id, phone_home, phone_cell, phone_work FROM inserted i 
+
 			INSERT contact_email
-			SELECT @contact_id, email_personal, email_work FROM inserted i 
-			
+			SELECT contact_id, email_personal, email_work FROM inserted i 
+
 			INSERT contact_website
-			SELECT @contact_id, website, github FROM inserted i 
+			SELECT contact_id, website, github FROM inserted i 
 
 				SELECT @retval = 1, @errmess = NULL -- assume success if reach this point
 				GOTO SPEND

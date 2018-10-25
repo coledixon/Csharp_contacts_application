@@ -61,3 +61,34 @@ GO
 		RETURN
 
 GO
+
+IF OBJECT_ID('dbo.spgetNextContactId') is not null DROP PROC [dbo].[spgetNextContactId]
+GO
+
+	CREATE PROC [dbo].[spgetNextContactId]
+	@contact_id int = 0 OUTPUT,
+	@retval int = NULL OUTPUT,
+	@errmess varchar(250) = NULL OUTPUT
+	AS
+
+	SELECT @contact_id = COALESCE(MAX(contact_id),1)
+		FROM contact_main
+
+		IF (COALESCE(@contact_id,0) = 0)
+		BEGIN
+			SELECT @retval = -1, @errmess = 'ERROR FETCHING NEXT contact_id'
+			GOTO ERROR
+		END
+		ELSE BEGIN
+			SELECT @contact_id = (@contact_id + 1), @retval = 1
+			GOTO SPEND
+		END
+
+	SPEND:
+		SELECT 'SUCCESS', @retval retval
+		RETURN
+	
+	ERROR:
+		SELECT @retval retval, @errmess errmess
+
+GO
