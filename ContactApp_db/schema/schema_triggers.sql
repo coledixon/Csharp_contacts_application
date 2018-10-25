@@ -109,6 +109,7 @@ GO
 
 		IF @@ROWCOUNT > 0
 		BEGIN
+			-- write audit record(s)
 			EXEC spwrite_audit @retval = @retval OUTPUT, @errmess = @errmess OUTPUT
 
 			IF (COALESCE(@retval,0) <= 0)
@@ -121,6 +122,35 @@ GO
 				GOTO SPEND
 			END
 		END
+
+		-- begin cascading delete of record(s)
+		SELECT @contact_id = COALESCE(contact_id,0) FROM #tmp_audit
+
+			IF (COALESCE(@contact_id,0) = 0)
+			BEGIN
+				SELECT @retval = -1, @errmess = 'ERROR RETRIEVING contact_id FROM #tmp_audit'
+				GOTO ERROR
+			END
+
+		DELETE FROM contact_address WHERE contact_id = @contact_id
+
+		DELETE FROM contact_phone WHERE contact_id = @contact_id
+
+		DELETE FROM contact_email WHERE contact_id = @contact_id
+
+		DELETE FROM contact_website WHERE contact_id = @contact_id
+
+		DELETE FROM contact_main WHERE contact_id = @contact_id -- delete this record last due to FK constraints
+
+			IF @@ROWCOUNT = 0
+			BEGIN
+				SELECT @retval = -1, @errmess = 'ERROR DELETING RECORD(S) IN trDEL_vcontact_data_all'
+				GOTO ERROR
+			END
+			ELSE BEGIN
+				SELECT @retval = 1 -- assume success
+				GOTO SPEND
+			END
 
 		SPEND:
 			SELECT 'SUCCESS', @retval retval
