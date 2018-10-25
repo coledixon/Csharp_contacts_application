@@ -70,7 +70,6 @@ namespace ContactApp.Classes
                 conn.Close(); // close db connection
             }
             return dt; // return datatable
-
         }
         #endregion
 
@@ -83,12 +82,14 @@ namespace ContactApp.Classes
             SqlConnection conn = new SqlConnection(dataconnstrng);
             try
             {
-                string sql = "INSERT INTO vcontact_data_all "
-                    + "VALUES (@first_name, @last_name, @address, @city, @state, @zip, "
+                string sql = "INSERT INTO vcontact_data_all (contact_id, first_name, last_name, address, city, state, zip, "
+                    + "email_personal, email_work, phone_home, phone_cell, phone_work, website, github) "
+                    + "VALUES (@contact_id, @first_name, @last_name, @address, @city, @state, @zip, "
                     + "@email_personal, @email_work, @phone_home, @phone_cell, @phone_work, @website, @github)";
 
                 SqlCommand cmd = new SqlCommand(sql, conn); // build insert
                 // add data values from screen to INSERT
+                cmd.Parameters.AddWithValue("@contact_id", c.ContactId);
                 cmd.Parameters.AddWithValue("@first_name", c.FirstName);
                 cmd.Parameters.AddWithValue("@last_name", c.LastName);
                 cmd.Parameters.AddWithValue("@address", c.Address);
@@ -108,7 +109,7 @@ namespace ContactApp.Classes
                 int rows = cmd.ExecuteNonQuery();
                 isSuccess = (rows > 0) ? true : false; // similar logic to @@ROWCOUNT in sql
 
-                //if (isSuccess)
+                //if (isSuccess) // TO DO
                 //{
                 //    Select();
                 //}
@@ -189,7 +190,7 @@ namespace ContactApp.Classes
             {
                 if (contact_id == 0) { isSuccess = false; return false; }
 
-                string sql = "DELETE FROM vcotact_data_all WHERE contact_id = @contact_id";
+                string sql = "DELETE FROM vcontact_data_all WHERE contact_id = @contact_id";
 
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 // where param
@@ -211,5 +212,48 @@ namespace ContactApp.Classes
             return isSuccess;
         }
         #endregion
+
+        // fetch next contact_id val
+        public int GetNextContactId()
+        {
+            int contact_id = 0; // default fail value
+            int retval;
+            string errmess;
+
+            SqlConnection conn = new SqlConnection(dataconnstrng);
+            try
+            {
+                string sql = "spgetNextContactId";
+
+                SqlCommand cmd = new SqlCommand(sql, conn) { CommandType = CommandType.StoredProcedure };
+                // set params as outputs
+                cmd.Parameters.Add("@contact_id", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@retval", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@errmess", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+
+                conn.Open(); // open db connection
+                cmd.ExecuteNonQuery();
+
+                // capture output vals
+                contact_id = Convert.ToInt32(cmd.Parameters["@contact_id"].Value);
+                retval = Convert.ToInt32(cmd.Parameters["@retval"].Value);
+                errmess = cmd.Parameters["@contact_id"].Value.ToString();
+
+                // alert error if SQL fails
+                if (retval <= 0) { MessageBox.Show("ERROR RUNNING spgetNextContactId FROM GetNextContactId()"); }
+
+                ContactId = contact_id; // set prop
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                conn.Close(); // close db connection
+            }
+            return contact_id;
+        }
     }
 }

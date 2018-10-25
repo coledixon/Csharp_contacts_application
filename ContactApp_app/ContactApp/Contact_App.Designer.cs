@@ -38,7 +38,7 @@
             this.lblFname = new System.Windows.Forms.Label();
             this.txtEmailP = new System.Windows.Forms.TextBox();
             this.lblEmailP = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtEmailW = new System.Windows.Forms.TextBox();
             this.lblEmailW = new System.Windows.Forms.Label();
             this.txtWebsite = new System.Windows.Forms.TextBox();
             this.lblWebsite = new System.Windows.Forms.Label();
@@ -46,9 +46,9 @@
             this.lblGitHub = new System.Windows.Forms.Label();
             this.txtAddress = new System.Windows.Forms.TextBox();
             this.lblAddress = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtCity = new System.Windows.Forms.TextBox();
             this.lblCity = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtState = new System.Windows.Forms.TextBox();
             this.lblState = new System.Windows.Forms.Label();
             this.txtPhoneC = new System.Windows.Forms.TextBox();
             this.lblPhoneC = new System.Windows.Forms.Label();
@@ -79,6 +79,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tTipAdd = new System.Windows.Forms.ToolTip(this.components);
+            this.btnNext = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -101,6 +102,7 @@
             this.txtContact.Name = "txtContact";
             this.txtContact.Size = new System.Drawing.Size(103, 22);
             this.txtContact.TabIndex = 1;
+            this.txtContact.Leave += new System.EventHandler(this.txtContact_LostFocus);
             // 
             // txtLname
             // 
@@ -108,6 +110,7 @@
             this.txtLname.Name = "txtLname";
             this.txtLname.Size = new System.Drawing.Size(173, 22);
             this.txtLname.TabIndex = 3;
+            this.txtLname.Leave += new System.EventHandler(this.txtLname_LostFocus);
             // 
             // lblLname
             // 
@@ -124,6 +127,7 @@
             this.txtFname.Name = "txtFname";
             this.txtFname.Size = new System.Drawing.Size(173, 22);
             this.txtFname.TabIndex = 2;
+            this.txtFname.Leave += new System.EventHandler(this.txtFname_LostFocus);
             // 
             // lblFname
             // 
@@ -150,12 +154,12 @@
             this.lblEmailP.TabIndex = 8;
             this.lblEmailP.Text = "Email (Personal)";
             // 
-            // textBox1
+            // txtEmailW
             // 
-            this.textBox1.Location = new System.Drawing.Point(201, 302);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(322, 22);
-            this.textBox1.TabIndex = 15;
+            this.txtEmailW.Location = new System.Drawing.Point(201, 302);
+            this.txtEmailW.Name = "txtEmailW";
+            this.txtEmailW.Size = new System.Drawing.Size(322, 22);
+            this.txtEmailW.TabIndex = 15;
             // 
             // lblEmailW
             // 
@@ -214,12 +218,12 @@
             this.lblAddress.TabIndex = 18;
             this.lblAddress.Text = "Address";
             // 
-            // textBox2
+            // txtCity
             // 
-            this.textBox2.Location = new System.Drawing.Point(165, 147);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(139, 22);
-            this.textBox2.TabIndex = 5;
+            this.txtCity.Location = new System.Drawing.Point(165, 147);
+            this.txtCity.Name = "txtCity";
+            this.txtCity.Size = new System.Drawing.Size(139, 22);
+            this.txtCity.TabIndex = 5;
             // 
             // lblCity
             // 
@@ -230,12 +234,12 @@
             this.lblCity.TabIndex = 20;
             this.lblCity.Text = "City";
             // 
-            // textBox3
+            // txtState
             // 
-            this.textBox3.Location = new System.Drawing.Point(357, 147);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(50, 22);
-            this.textBox3.TabIndex = 6;
+            this.txtState.Location = new System.Drawing.Point(357, 147);
+            this.txtState.Name = "txtState";
+            this.txtState.Size = new System.Drawing.Size(50, 22);
+            this.txtState.TabIndex = 6;
             // 
             // lblState
             // 
@@ -338,7 +342,6 @@
             this.label3.Size = new System.Drawing.Size(13, 17);
             this.label3.TabIndex = 35;
             this.label3.Text = ")";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label4
             // 
@@ -412,13 +415,14 @@
             this.btnClear.Size = new System.Drawing.Size(95, 40);
             this.btnClear.TabIndex = 21;
             this.btnClear.UseVisualStyleBackColor = false;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // lblLoadInfo
             // 
             this.lblLoadInfo.AutoSize = true;
             this.lblLoadInfo.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblLoadInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLoadInfo.Location = new System.Drawing.Point(310, 24);
+            this.lblLoadInfo.Location = new System.Drawing.Point(354, 26);
             this.lblLoadInfo.Name = "lblLoadInfo";
             this.lblLoadInfo.Size = new System.Drawing.Size(168, 13);
             this.lblLoadInfo.TabIndex = 43;
@@ -435,6 +439,7 @@
             this.btnDelete.Size = new System.Drawing.Size(95, 40);
             this.btnDelete.TabIndex = 20;
             this.btnDelete.UseVisualStyleBackColor = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnUpdate
             // 
@@ -447,6 +452,7 @@
             this.btnUpdate.Size = new System.Drawing.Size(95, 40);
             this.btnUpdate.TabIndex = 19;
             this.btnUpdate.UseVisualStyleBackColor = false;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnAdd
             // 
@@ -459,6 +465,8 @@
             this.btnAdd.Size = new System.Drawing.Size(95, 40);
             this.btnAdd.TabIndex = 18;
             this.btnAdd.UseVisualStyleBackColor = false;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            this.btnAdd.MouseHover += new System.EventHandler(this.btnAdd_MouseHover);
             // 
             // pictureBox5
             // 
@@ -514,11 +522,24 @@
             // 
             this.tTipAdd.ToolTipTitle = "ADD";
             // 
+            // btnNext
+            // 
+            this.btnNext.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.btnNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNext.Location = new System.Drawing.Point(310, 21);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(22, 23);
+            this.btnNext.TabIndex = 44;
+            this.btnNext.Text = "+";
+            this.btnNext.UseVisualStyleBackColor = false;
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            // 
             // Contact_App
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(550, 486);
+            this.Controls.Add(this.btnNext);
             this.Controls.Add(this.lblLoadInfo);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnDelete);
@@ -539,9 +560,9 @@
             this.Controls.Add(this.txtPhoneH);
             this.Controls.Add(this.lblPhoneH);
             this.Controls.Add(this.pictureBox5);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.txtState);
             this.Controls.Add(this.lblState);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.txtCity);
             this.Controls.Add(this.lblCity);
             this.Controls.Add(this.txtAddress);
             this.Controls.Add(this.lblAddress);
@@ -550,7 +571,7 @@
             this.Controls.Add(this.lblGitHub);
             this.Controls.Add(this.txtWebsite);
             this.Controls.Add(this.lblWebsite);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtEmailW);
             this.Controls.Add(this.lblEmailW);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.txtEmailP);
@@ -593,7 +614,7 @@
         private System.Windows.Forms.TextBox txtEmailP;
         private System.Windows.Forms.Label lblEmailP;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtEmailW;
         private System.Windows.Forms.Label lblEmailW;
         private System.Windows.Forms.TextBox txtWebsite;
         private System.Windows.Forms.Label lblWebsite;
@@ -602,9 +623,9 @@
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.TextBox txtAddress;
         private System.Windows.Forms.Label lblAddress;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtCity;
         private System.Windows.Forms.Label lblCity;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtState;
         private System.Windows.Forms.Label lblState;
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.TextBox txtPhoneC;
@@ -631,6 +652,7 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Label lblLoadInfo;
         private System.Windows.Forms.ToolTip tTipAdd;
+        private System.Windows.Forms.Button btnNext;
     }
 }
 
