@@ -19,9 +19,11 @@ namespace ContactApp
             InitializeComponent();
         }
 
-        // instantiate class(es)
-        contactData data = new contactData();
+        // INSTANTIATE CLASSES
+        contactData data = new contactData(); // data class
+        contactExt ext = new contactExt(); // method class
 
+        // FORM EVENTS
         #region button events
         private void btnNext_Click(object sender, EventArgs e)
         {
@@ -113,41 +115,14 @@ namespace ContactApp
             data.City = txtCity.Text;
             data.State = txtState.Text.ToUpper();
             data.Zip = Convert.ToInt32(txtZip.Text);
-            data.PhoneHome = parsePhoneNumber(txtAreaH.Text, txtPhoneH.Text);
-            data.PhoneCell = parsePhoneNumber(txtAreaC.Text, txtPhoneC.Text);
-            data.PhoneWork = parsePhoneNumber(txtAreaW.Text, txtPhoneW.Text);
-            data.EmailPersonal = parseEmail(txtEmailP.Text);
-            data.EmailWork = parseEmail(txtEmailW.Text);
-            data.Website = parseWebsite(txtWebsite.Text, false);
-            data.Github = parseWebsite(txtGitHub.Text, true);
+            data.PhoneHome = ext.parsePhoneNumber(txtAreaH.Text, txtPhoneH.Text);
+            data.PhoneCell = ext.parsePhoneNumber(txtAreaC.Text, txtPhoneC.Text);
+            data.PhoneWork = ext.parsePhoneNumber(txtAreaW.Text, txtPhoneW.Text);
+            data.EmailPersonal = ext.parseEmail(txtEmailP.Text);
+            data.EmailWork = ext.parseEmail(txtEmailW.Text);
+            data.Website = ext.parseWebsite(txtWebsite.Text, false);
+            data.Github = ext.parseWebsite(txtGitHub.Text, true);
         }
-
-        #region parsing methods
-        // parse phone number
-        private string parsePhoneNumber(string areaCode, string phoneNumber)
-        {
-            Regex _reg = new Regex("[-. ]"); // remove - and . chars
-            string _parsed = "(" + areaCode + ")" + _reg.Replace(phoneNumber, "");
-            if (string.IsNullOrEmpty(phoneNumber)) { _parsed = ""; } // eliminate empty () on parse
-            return _parsed;
-        }
-
-        // parse website
-        private string parseWebsite(string site, bool isGit)
-        {
-            // ensure proper website syntax (only validate https on github)
-            string _parsed = (!site.ToLower().Contains("https://")) ? "https://" + site : site;
-            _parsed = (!site.ToLower().Contains(".com") && !isGit) ? _parsed + ".com" : _parsed;
-            return _parsed;
-        }
-
-        private string parseEmail(string email)
-        {
-            // ensure proper email syntax
-            string _parsed = (!email.ToLower().Contains(".com")) ? email + ".com" : email;
-            return _parsed;
-        }
-        #endregion
 
         private void txtContact_ReadOnlyChanged(object sender, EventArgs e)
         {
