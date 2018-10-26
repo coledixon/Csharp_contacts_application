@@ -12,7 +12,7 @@ GO
 -- del triggers on audit_contact / audit_info
 
 -----
---- INSERT/UPDATE trigger on vcontact_data_all
+--- INSERT/UPDATE TRIGGER on vcontact_data_all
 -----
 IF OBJECT_ID('dbo.trINSUPD_vcontact_data_all') is not null DROP TRIGGER [dbo].[trINSUPD_vcontact_data_all] 
 GO
@@ -91,7 +91,7 @@ GO
 GO
 
 -----
---- DELETE trigger on vcontact_data_all
+--- DELETE TRIGGER on vcontact_data_all
 -----
 IF OBJECT_ID('dbo.trDEL_vcontact_data_all') is not null DROP TRIGGER [dbo].[trDEL_vcontact_data_all] 
 GO
@@ -114,10 +114,6 @@ GO
 			BEGIN
 				SELECT @retval = COALESCE(@retval,-1), @errmess = COALESCE(@errmess, 'ERROR RUNNING spwrite_audit')
 				GOTO ERROR
-			END
-			ELSE BEGIN
-				SELECT @retval = COALESCE(@retval,1)
-				GOTO SPEND
 			END
 		END
 
@@ -157,6 +153,61 @@ GO
 
 		SPEND:
 			SELECT 'SUCCESS', @retval retval
+			RETURN
+
+		ERROR:
+			SELECT 'FAIL', @retval retval, @errmess err
+			RETURN
+	END
+
+GO
+
+-----
+--- DELETE TRIGGER on audit_contact
+-----
+IF OBJECT_ID('dbo.trDEL_audit_contact') is not null DROP TRIGGER [dbo].[trDEL_audit_contact]
+GO
+
+	CREATE TRIGGER [dbo].[trDEL_audit_contact] ON [dbo].[audit_contact]
+	INSTEAD OF DELETE
+	AS
+	BEGIN
+		DECLARE @user varchar(MAX), @allowdelete int, @retval int, @errmess varchar(250)
+
+		SELECT @user = CURRENT_USER, @allowdelete = 0 -- default to curr user / allowdelete = false
+
+		IF IS_ROLEMEMBER ('db_owner', @user) = 1
+		BEGIN
+			SET @allowdelete = 1
+		END
+
+		IF (COALESCE(@allowdelete,0) = 0)
+		BEGIN
+			raiserror('USER DOES NOT HAVE DB PERMS TO DELETE AUDIT RECORDS.', 16, 1);
+			SET @retval = -1
+			GOTO ERROR
+		END
+		ELSE BEGIN
+			DELETE i -- delete info record(s) first due to referential integrity
+				FROM audit_info i
+				JOIN deleted d (NOLOCK) ON d.contact_id = i.contact_id
+
+			DELETE c
+				FROM audit_contact c
+				JOIN deleted d (NOLOCK) ON d.contact_id = c.contact_id
+
+			IF @@ROWCOUNT = 0
+			BEGIN
+				SELECT @retval = -1, @errmess = 'ERROR DELETING RECORD FROM audit_contact / audit_info IN trDEL_audit_contact'
+				GOTO ERROR
+			END
+			ELSE BEGIN
+				SET @retval = 1
+				GOTO SPEND
+			END
+		END
+
+		SPEND:
 			RETURN
 
 		ERROR:
