@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace ContactApp.Classes
 {
-    class contactData
+    class contactData 
     {
         // INSTANTIATE CLASS(ES)
         contactProp prop = new contactProp(); // properties class

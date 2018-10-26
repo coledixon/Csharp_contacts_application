@@ -84,9 +84,11 @@ namespace ContactApp
         private void txtContact_LostFocus(object sender, EventArgs e)
         {
             // fire Select() txtContact.text
-            if (txtContact.Text.Length > 0)
+            if (txtContact.Text.Length > 0 && txtContact.Enabled == true)
             {
-                data.Select();
+                DataTable dt = new DataTable();
+                dt = data.Select(Convert.ToInt32(txtContact.Text));
+                SetReturnValues(dt);
             }
         }
 
@@ -107,9 +109,16 @@ namespace ContactApp
         }
         #endregion
 
+        private void txtContact_ReadOnlyChanged(object sender, EventArgs e)
+        {
+            if (txtContact.ReadOnly) { btnNext.Enabled = false; }
+            else { btnNext.Enabled = true; }
+        }
+
         // set properties
         private void SetProps()
         {
+            prop.ContactId = Convert.ToInt32(txtContact.Text);
             prop.FirstName = txtFname.Text;
             prop.LastName = txtLname.Text;
             prop.Address = txtAddress.Text;
@@ -125,10 +134,41 @@ namespace ContactApp
             prop.Github = ext.parseWebsite(txtGitHub.Text, true);
         }
 
-        private void txtContact_ReadOnlyChanged(object sender, EventArgs e)
+        // set form select() values
+        public void SetReturnValues(DataTable dt)
         {
-            if (txtContact.ReadOnly) { btnAdd.Enabled = false; }
-            else { btnAdd.Enabled = true; }
+            if (dt.Rows.Count == 1)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string area; string phone;
+                    // strongly typed values
+                    txtFname.Text = dr["first_name"].ToString();
+                    txtLname.Text = dr["last_name"].ToString();
+                    txtAddress.Text = dr["address"].ToString();
+                    txtCity.Text = dr["city"].ToString();
+                    txtState.Text = dr["state"].ToString();
+                    txtZip.Text = dr["zip"].ToString();
+                    // reparse phone numbers to fit form fields
+                    ext.parsePhoneNumber(dr["phone_home"].ToString(), out area, out phone);
+                        txtAreaH.Text = area;
+                        txtPhoneH.Text = phone;
+                    ext.parsePhoneNumber(dr["phone_cell"].ToString(), out area, out phone);
+                        txtAreaC.Text = area;
+                        txtPhoneC.Text = phone;
+                    ext.parsePhoneNumber(dr["phone_work"].ToString(), out area, out phone);
+                        txtAreaW.Text = area;
+                        txtPhoneW.Text = phone;
+                    // end reparse
+                    txtEmailP.Text = dr["email_personal"].ToString();
+                    txtEmailW.Text = dr["email_work"].ToString();
+                    txtWebsite.Text = dr["website"].ToString();
+                    txtGitHub.Text = dr["github"].ToString();
+                    txtContact.ReadOnly = true; // disable contactid field
+                }
+            }
+            else { MessageBox.Show("contactData.Select() returned more than 1 row from database"); }
         }
+
     }
 }
