@@ -1,12 +1,16 @@
 /* SCHEMA FOR C# CONTACT APPLICATION */
+/* Copyright 2018 || Cole Dixon || All rights reserved */
 
 USE [db_contacts]
 GO
 
 
 /* --- PROCS ---*/
-
 -- drop and create in case of master schema changes
+
+-----
+--- INSERT PROC for all audit table reocrds (audit_contact / audit_info)
+-----
 IF OBJECT_ID ('dbo.spwrite_audit') is not null DROP PROC [dbo].[spwrite_audit]
 GO
 
@@ -24,12 +28,11 @@ GO
 	END
 
 	INSERT audit_contact (contact_id, first_name, last_name, del_date)
-	SELECT contact_id, first_name, last_name, GETDATE() 
-		FROM #tmp_audit
+	SELECT contact_id, first_name, last_name, GETDATE() FROM #tmp_audit
 
 		IF @@ROWCOUNT > 0
 		BEGIN
-			SELECT @audit_key = MAX(audit_key) FROM audit_contact -- get newly create audit_key
+			SELECT @audit_key = MAX(audit_key) FROM audit_contact -- get newly created audit_key
 		END
 		ELSE BEGIN
 			SELECT @retval = -1, @errmess = 'FAILURE CREATING audit_contact RECORD'
@@ -62,6 +65,9 @@ GO
 
 GO
 
+-----
+--- FETCH PROC for returning next contact_id val to app
+-----
 IF OBJECT_ID('dbo.spgetNextContactId') is not null DROP PROC [dbo].[spgetNextContactId]
 GO
 
@@ -80,7 +86,7 @@ GO
 			GOTO ERROR
 		END
 		ELSE BEGIN
-			SELECT @contact_id = (@contact_id + 1), @retval = 1
+			SELECT @contact_id = (@contact_id + 1) /* increment id */, @retval = 1
 			GOTO SPEND
 		END
 
@@ -90,5 +96,6 @@ GO
 	
 	ERROR:
 		SELECT @retval retval, @errmess errmess
+		RETURN
 
 GO

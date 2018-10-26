@@ -1,12 +1,16 @@
 /* SCHEMA FOR C# CONTACT APPLICATION */
+/* Copyright 2018 || Cole Dixon || All rights reserved */
 
 USE [db_contacts]
 GO
 
 
 /* --- VIEWS --- */
-
 -- drop and create in case of master schema changes
+
+-----
+--- VIEW for all related contact data
+-----
 IF OBJECT_ID('dbo.vcontact_data_all') is not null DROP VIEW [dbo].[vcontact_data_all]
 GO
 
@@ -23,7 +27,9 @@ GO
 
 	GO
 
-
+-----
+--- VIEW for all related audit data
+-----
 IF OBJECT_ID('dbo.vcontact_audit_all') is not null DROP VIEW [dbo].[vcontact_audit_all]
 GO
 

@@ -1,14 +1,19 @@
 /* SCHEMA FOR C# CONTACT APPLICATION */
+/* Copyright 2018 || Cole Dixon || All rights reserved */
 
 USE [db_contacts]
 GO
 
 
 /* --- TRIGGERS --- */
--- TO DO
--- delete trigger (similar to cascade functionality)
-
 -- drop and create in case of master schema changes
+
+-- TO DO
+-- del triggers on audit_contact / audit_info
+
+-----
+--- INSERT/UPDATE trigger on vcontact_data_all
+-----
 IF OBJECT_ID('dbo.trINSUPD_vcontact_data_all') is not null DROP TRIGGER [dbo].[trINSUPD_vcontact_data_all] 
 GO
 
@@ -85,7 +90,9 @@ GO
 
 GO
 
-
+-----
+--- DELETE trigger on vcontact_data_all
+-----
 IF OBJECT_ID('dbo.trDEL_vcontact_data_all') is not null DROP TRIGGER [dbo].[trDEL_vcontact_data_all] 
 GO
 
@@ -123,24 +130,29 @@ GO
 				GOTO ERROR
 			END
 
-		DELETE FROM contact_address WHERE contact_id = @contact_id
+		BEGIN TRAN
+			DELETE FROM contact_address WHERE contact_id = @contact_id
 
-		DELETE FROM contact_phone WHERE contact_id = @contact_id
+			DELETE FROM contact_phone WHERE contact_id = @contact_id
 
-		DELETE FROM contact_email WHERE contact_id = @contact_id
+			DELETE FROM contact_email WHERE contact_id = @contact_id
 
-		DELETE FROM contact_website WHERE contact_id = @contact_id
+			DELETE FROM contact_website WHERE contact_id = @contact_id
 
-		DELETE FROM contact_main WHERE contact_id = @contact_id -- delete this record last due to FK constraints
+			DELETE FROM contact_main WHERE contact_id = @contact_id -- delete this record last due to FK constraints
 
 			IF @@ROWCOUNT = 0
 			BEGIN
 				SELECT @retval = -1, @errmess = 'ERROR DELETING RECORD(S) IN trDEL_vcontact_data_all'
 				GOTO ERROR
+
+			ROLLBACK TRAN
 			END
 			ELSE BEGIN
 				SELECT @retval = 1 -- assume success
 				GOTO SPEND
+
+			COMMIT TRAN
 			END
 
 		SPEND:

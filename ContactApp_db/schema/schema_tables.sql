@@ -1,4 +1,5 @@
 /* SCHEMA FOR C# CONTACT APPLICATION */
+/* Copyright 2018 || Cole Dixon || All rights reserved */
 
 IF NOT EXISTS(SELECT name FROM sys.databases WHERE name ='db_contacts')
 BEGIN
@@ -16,7 +17,7 @@ IF OBJECT_ID('dbo.contact_main') is null
 BEGIN
 	-- master contact table
 	CREATE TABLE contact_main (
-			[contact_id] int /* IDENTITY(1,1) REMOVED handling with proc */,
+			[contact_id] int /* IDENTITY(1,1) REMOVED handling with proc (spgetNextContactId) */,
 			[first_name] varchar(50) not null,
 			[last_name] varchar(50) not null,
 			[create_date] datetime not null,
