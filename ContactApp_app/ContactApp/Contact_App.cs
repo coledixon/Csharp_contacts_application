@@ -40,42 +40,33 @@ namespace ContactApp
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            SetProps(); // enaure all class values are set
+            SetProps(); // ensure all class properties are set
             bool isSuccess = data.Insert(prop);
 
-            if (isSuccess)
-            {
-                MessageBox.Show("New contact record added for " + prop.FirstName + " " + prop.LastName);
-                txtContact.ReadOnly = false;
-            }
-            else { MessageBox.Show("Error saving record to db_contacts"); }
+            if (isSuccess) { MessageBox.Show("New contact record added for " + prop.FirstName + " " + prop.LastName, "ADD"); Clear(); }
+            else { MessageBox.Show("ERROR SAVING RECORD TO db_contacts", "ERROR"); }
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            // Update()
-            txtContact.ReadOnly = false;
+            SetProps(); // ensure all class propeties are set
+            bool isSuccess = data.Update(prop, Convert.ToInt32(txtContact.Text));
+
+            if (isSuccess) { MessageBox.Show("Record updated for " + prop.FirstName + " " + prop.LastName, "UPDATE"); Clear(); }
+            else { MessageBox.Show("ERROR SAVING RECORD TO db_contacts", "ERROR"); }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
             // Delete()
-            txtContact.ReadOnly = false;
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            // build form clear functionality
+            // form clear functionality
             DialogResult _res = MessageBox.Show("Do you want to clear the form?", "CLEAR", MessageBoxButtons.YesNo);
-            if (_res == DialogResult.Yes)
-            {
-                foreach (Control ctl in this.Controls) // clear all text elements on gen'in new contactid
-                {
-                    if (ctl.GetType() == typeof(TextBox))
-                        ((TextBox)ctl).Text = String.Empty;
-                }
-                txtContact.ReadOnly = false; // reset readonly
-            }
+
+            if (_res == DialogResult.Yes) { Clear(); }
             else { return; }
         }
         #endregion
@@ -83,8 +74,10 @@ namespace ContactApp
         #region focus events
         private void txtContact_LostFocus(object sender, EventArgs e)
         {
+            if (Regex.IsMatch(txtContact.Text, @"[a-zA-Z]+$")) { MessageBox.Show("Contact Id entered is not numeric.", "ERROR"); Clear(); return; }
+
             // fire Select() txtContact.text
-            if (txtContact.Text.Length > 0 && txtContact.Enabled == true)
+            if (txtContact.Text.Length > 0 && !txtContact.ReadOnly)
             {
                 DataTable dt = new DataTable();
                 dt = data.Select(Convert.ToInt32(txtContact.Text));
@@ -115,6 +108,7 @@ namespace ContactApp
             else { btnNext.Enabled = true; }
         }
 
+        // FORM METHODS
         // set properties
         private void SetProps()
         {
@@ -151,14 +145,14 @@ namespace ContactApp
                     txtZip.Text = dr["zip"].ToString();
                     // reparse phone numbers to fit form fields
                     ext.parsePhoneNumber(dr["phone_home"].ToString(), out area, out phone);
-                        txtAreaH.Text = area;
-                        txtPhoneH.Text = phone;
+                    txtAreaH.Text = area;
+                    txtPhoneH.Text = phone;
                     ext.parsePhoneNumber(dr["phone_cell"].ToString(), out area, out phone);
-                        txtAreaC.Text = area;
-                        txtPhoneC.Text = phone;
+                    txtAreaC.Text = area;
+                    txtPhoneC.Text = phone;
                     ext.parsePhoneNumber(dr["phone_work"].ToString(), out area, out phone);
-                        txtAreaW.Text = area;
-                        txtPhoneW.Text = phone;
+                    txtAreaW.Text = area;
+                    txtPhoneW.Text = phone;
                     // end reparse
                     txtEmailP.Text = dr["email_personal"].ToString();
                     txtEmailW.Text = dr["email_work"].ToString();
@@ -167,7 +161,18 @@ namespace ContactApp
                     txtContact.ReadOnly = true; // disable contactid field
                 }
             }
-            else { MessageBox.Show("contactData.Select() returned more than 1 row from database"); }
+            else if (dt.Rows.Count > 1) { MessageBox.Show("contactData.Select() returned more than 1 row from database", "ERROR"); Clear(); }
+            else { MessageBox.Show("Contact Id does not exist.", "ERROR"); Clear(); }
+        }
+
+        private void Clear()
+        {
+            foreach (Control ctl in this.Controls) // clear all text elements on gen'in new contactid
+            {
+                if (ctl.GetType() == typeof(TextBox))
+                    ((TextBox)ctl).Text = String.Empty;
+            }
+            txtContact.ReadOnly = false; // reset readonly
         }
 
     }

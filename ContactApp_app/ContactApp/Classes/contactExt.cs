@@ -12,10 +12,11 @@ namespace ContactApp.Classes
     class contactExt
     {
         #region parsing methods
-        // parse phone numbers
+        // parse phone numbers (overloads)
         public string parsePhoneNumber(string areaCode, string phoneNumber) // add/update data
         {
                 Regex _reg = new Regex("[-. ]"); // remove - and . chars
+
                 string _parsed = "(" + areaCode + ")" + _reg.Replace(phoneNumber, ""); // wrap area code ()
                 if (string.IsNullOrEmpty(phoneNumber)) { _parsed = ""; } // eliminate empty () on NULL
                 return _parsed;
