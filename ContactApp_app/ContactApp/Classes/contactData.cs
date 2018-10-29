@@ -53,7 +53,7 @@ namespace ContactApp.Classes
                 var t = new Tuple<string, string>(f_name, l_name);
 
                 string sql = "SELECT * FROM vcontact_data_all";
-                sql = sql + t.Compare(f_name, l_name);
+                sql = sql + t.Eval(f_name, l_name);
 
                 SqlCommand cmd = new SqlCommand(sql, conn); // build query
                 SqlDataAdapter adp = new SqlDataAdapter(cmd);
@@ -228,7 +228,7 @@ namespace ContactApp.Classes
     // TUPLE COMPARISON FOR Select() OVERLOAD
     static class CompareTuple
     {
-        public static string Compare<T1, T2>(this Tuple<T1, T2> value, T1 v1, T2 v2)
+        public static string Eval<T1, T2>(this Tuple<T1, T2> value, T1 v1, T2 v2)
         {
             string where = "";
             if (!string.IsNullOrEmpty(v1.ToString()) && string.IsNullOrEmpty(v2.ToString()))
