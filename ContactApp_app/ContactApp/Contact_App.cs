@@ -14,7 +14,7 @@ namespace ContactApp
 {
     public partial class Contact_App : Form
     {
-        bool _newRecord; // build logic for insert / update delineation on Clear() && Form_Close()
+        bool _newRecord; // flag if new record
         private contactDirty _dirty;
 
         public Contact_App()
@@ -50,7 +50,7 @@ namespace ContactApp
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (_dirty._isDirty)
+            if (_dirty._isDirty && _newRecord)
             {
                 SetProps(); // ensure all class properties are set
                 bool isSuccess = data.Insert(prop);
@@ -210,8 +210,6 @@ namespace ContactApp
             prop.EmailWork = ext.parseEmail(txtEmailW.Text);
             prop.Website = ext.parseWebsite(txtWebsite.Text, false);
             prop.Github = ext.parseWebsite(txtGitHub.Text, true);
-
-            _dirty.SetDirty();
         }
 
         // set form select() values
