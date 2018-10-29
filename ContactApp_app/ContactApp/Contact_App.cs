@@ -14,6 +14,7 @@ namespace ContactApp
 {
     public partial class Contact_App : Form
     {
+        bool _newRecord; // build logic for insert / update delineation on Clear() && Form_Close()
         private contactDirty _dirty;
 
         public Contact_App()
@@ -36,7 +37,7 @@ namespace ContactApp
         #region button events
         private void btnNext_Click(object sender, EventArgs e)
         {
-            foreach (Control ctl in this.Controls) // clear all text elements on gen'in new contactid
+            foreach (Control ctl in this.Controls) // clear all text elements on gen new contactid
             {
                 if (ctl.GetType() == typeof(TextBox))
                     ((TextBox)ctl).Text = String.Empty;
@@ -90,11 +91,26 @@ namespace ContactApp
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            // form clear functionality
-            DialogResult _res = MessageBox.Show("Do you want to clear the form?", "CLEAR", MessageBoxButtons.YesNo);
+            if (_dirty._isDirty)
+            {
+                // form clear functionality
+                DialogResult _res = MessageBox.Show("Save changes before clearing?", "CLEAR", MessageBoxButtons.YesNo);
 
-            if (_res == DialogResult.Yes) { Clear(); }
-            else { return; }
+                if (_res == DialogResult.Yes)
+                {
+                    bool isSuccess = data.Update(prop, Convert.ToInt32(txtContact.Text));
+
+                    if (isSuccess) { MessageBox.Show("Record updated for " + prop.FirstName + " " + prop.LastName, "UPDATE"); Clear(); }
+                    else { MessageBox.Show("ERROR UPDATING RECORD IN db_contacts", "ERROR"); }
+                }
+                else { return; }
+            }
+            else
+            {
+                DialogResult _res = MessageBox.Show("Do you want to clear the form?", "CLEAR", MessageBoxButtons.YesNo);
+
+                if (_res == DialogResult.Yes) { Clear(); }
+            }
         }
         #endregion
 
