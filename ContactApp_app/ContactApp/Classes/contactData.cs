@@ -36,14 +36,9 @@ namespace ContactApp.Classes
                 conn.Open(); // open db connection
                 adp.Fill(dt); // populate virtual table
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                conn.Close(); // close db connection
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            finally { conn.Close(); } // close db connection
+
             return dt; // return datatable
         }
 
@@ -65,14 +60,9 @@ namespace ContactApp.Classes
                 conn.Open(); // open db connection
                 adp.Fill(dt); // populate virtual table
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                conn.Close(); // close db connection
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            finally { conn.Close(); } // close db connection
+
             return dt; // return datatable
         }
         #endregion
@@ -113,14 +103,9 @@ namespace ContactApp.Classes
                 int rows = cmd.ExecuteNonQuery();
                 isSuccess = (rows > 0) ? true : false; // similar logic to @@ROWCOUNT in sql
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                conn.Close(); // close db connection
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            finally { conn.Close(); } // close db connection
+
             return isSuccess; // return status
         }
         #endregion
@@ -165,14 +150,9 @@ namespace ContactApp.Classes
                 int rows = cmd.ExecuteNonQuery();
                 isSuccess = (rows > 0) ? true : false; // similar logic to @@ROWCOUNT in sql
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                conn.Close(); // close db connection
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            finally { conn.Close(); } // close db connection
+
             return isSuccess;
         }
         #endregion
@@ -199,14 +179,9 @@ namespace ContactApp.Classes
                 int rows = cmd.ExecuteNonQuery();
                 isSuccess = (rows > 0) ? true : false; // similar logic to @@ROWCOUNT in sql
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                conn.Close(); // close db connection
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            finally { conn.Close(); } // close db connection
+
             return isSuccess;
         }
         #endregion
@@ -243,14 +218,9 @@ namespace ContactApp.Classes
                 prop.ContactId = contact_id; // set prop
 
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                conn.Close(); // close db connection
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            finally { conn.Close(); } // close db connection
+
             return contact_id;
         }
     }
