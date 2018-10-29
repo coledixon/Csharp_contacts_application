@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ContactApp.Classes
 {
     class contactProp
     {
-        // getters / setters (associated to tables in schema)
-        // column names not same as GET/SET props (schema includes _)
+        // column names not same as props (schema includes _)
         #region get/set
         // contact_main
         public int ContactId { get; set; }

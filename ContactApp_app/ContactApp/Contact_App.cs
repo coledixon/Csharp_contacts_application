@@ -14,9 +14,17 @@ namespace ContactApp
 {
     public partial class Contact_App : Form
     {
+        private contactDirty _dirty;
+
         public Contact_App()
         {
             InitializeComponent();
+        }
+
+        private void Form_Load(object sender, EventArgs e)
+        {
+            _dirty = new contactDirty(this);
+            _dirty.SetClean();
         }
 
         // INSTANTIATE CLASS(ES)
@@ -40,35 +48,44 @@ namespace ContactApp
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            SetProps(); // ensure all class properties are set
-            bool isSuccess = data.Insert(prop);
+            if (_dirty._isDirty)
+            {
+                SetProps(); // ensure all class properties are set
+                bool isSuccess = data.Insert(prop);
 
-            if (isSuccess) { MessageBox.Show("New contact record added for " + prop.FirstName + " " + prop.LastName, "ADD"); Clear(); }
-            else { MessageBox.Show("ERROR SAVING RECORD TO db_contacts", "ERROR"); }
+                if (isSuccess) { MessageBox.Show("New contact record added for " + prop.FirstName + " " + prop.LastName, "ADD"); Clear(); }
+                else { MessageBox.Show("ERROR SAVING RECORD TO db_contacts", "ERROR"); }
+            }
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            SetProps(); // ensure all class propeties are set
-            bool isSuccess = data.Update(prop, Convert.ToInt32(txtContact.Text));
+            if (_dirty._isDirty)
+            {
+                SetProps(); // ensure all class propeties are set
+                bool isSuccess = data.Update(prop, Convert.ToInt32(txtContact.Text));
 
-            if (isSuccess) { MessageBox.Show("Record updated for " + prop.FirstName + " " + prop.LastName, "UPDATE"); Clear(); }
-            else { MessageBox.Show("ERROR UPDATING RECORD IN db_contacts", "ERROR"); }
+                if (isSuccess) { MessageBox.Show("Record updated for " + prop.FirstName + " " + prop.LastName, "UPDATE"); Clear(); }
+                else { MessageBox.Show("ERROR UPDATING RECORD IN db_contacts", "ERROR"); }
+            }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            SetProps(); // ensure all class propeties are set
-            DialogResult _res = MessageBox.Show("Are you sure you want to remove " + prop.FirstName + " " + prop.LastName + " from the database?", "DELETE", MessageBoxButtons.YesNo);
-
-            if (_res == DialogResult.Yes)
+            if (_dirty._isDirty)
             {
-                bool isSuccess = data.Delete(prop, Convert.ToInt32(txtContact.Text));
+                SetProps(); // ensure all class propeties are set
+                DialogResult _res = MessageBox.Show("Are you sure you want to remove " + prop.FirstName + " " + prop.LastName + " from the database?", "DELETE", MessageBoxButtons.YesNo);
 
-                if (isSuccess) { MessageBox.Show(prop.FirstName + " " + prop.LastName + " deleted from database.", "DELETE"); Clear(); }
-                else { MessageBox.Show("ERROR DELETING RECORD FROM db_contacts", "ERROR"); }
+                if (_res == DialogResult.Yes)
+                {
+                    bool isSuccess = data.Delete(prop, Convert.ToInt32(txtContact.Text));
+
+                    if (isSuccess) { MessageBox.Show(prop.FirstName + " " + prop.LastName + " deleted from database.", "DELETE"); Clear(); }
+                    else { MessageBox.Show("ERROR DELETING RECORD FROM db_contacts", "ERROR"); }
+                }
+                else { return; }
             }
-            else { return; }
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -82,6 +99,23 @@ namespace ContactApp
         #endregion
 
         #region focus events
+        private void Form_Closing(object sender, FormClosingEventArgs e)
+        {
+            if (_dirty._isDirty)
+            {
+                DialogResult _res = MessageBox.Show("Save changes before closing?", "CLEAR", MessageBoxButtons.YesNo);
+
+                if (_res == DialogResult.Yes)
+                {
+                    bool isSuccess = data.Update(prop, Convert.ToInt32(txtContact.Text));
+
+                    if (isSuccess) { MessageBox.Show("Record updated for " + prop.FirstName + " " + prop.LastName, "UPDATE"); Clear(); }
+                    else { MessageBox.Show("ERROR UPDATING RECORD IN db_contacts", "ERROR"); }
+                }
+                else { return; }
+            }
+        }
+
         private void txtContact_LostFocus(object sender, EventArgs e)
         {
             if (Regex.IsMatch(txtContact.Text, @"[a-zA-Z]+$")) { MessageBox.Show("Contact Id entered is not numeric.", "ERROR"); Clear(); return; }
@@ -147,6 +181,8 @@ namespace ContactApp
             prop.EmailWork = ext.parseEmail(txtEmailW.Text);
             prop.Website = ext.parseWebsite(txtWebsite.Text, false);
             prop.Github = ext.parseWebsite(txtGitHub.Text, true);
+
+            _dirty.SetDirty();
         }
 
         // set form select() values
@@ -195,7 +231,7 @@ namespace ContactApp
                     ((TextBox)ctl).Text = String.Empty;
             }
             txtContact.ReadOnly = false; // reset readonly
+            _dirty.SetClean();
         }
-
     }
 }

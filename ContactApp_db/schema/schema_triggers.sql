@@ -176,7 +176,7 @@ GO
 
 		IF IS_ROLEMEMBER ('db_owner', @user) = 1
 		BEGIN
-			SET @allowdelete = 1
+			SET @allowdelete = 1 -- only db_owner can delete audit record(s)
 		END
 
 		IF (COALESCE(@allowdelete,0) = 0)
