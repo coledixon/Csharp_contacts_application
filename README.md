@@ -5,6 +5,6 @@
 - store information in SQL (SSMS 2017)
 - IDE(s): Visual Studio Community 2017 / VS Code
 
-// APPLICATION
+// APPLICATION IMAGE
 
-![alt text] (https://github.com/coledixon/Csharp_contacts_application/blob/master/ContactApp_app/Capture.PNG)
+(https://github.com/coledixon/Csharp_contacts_application/blob/master/ContactApp_app/Capture.PNG)
