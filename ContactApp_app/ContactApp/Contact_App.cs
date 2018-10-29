@@ -53,12 +53,22 @@ namespace ContactApp
             bool isSuccess = data.Update(prop, Convert.ToInt32(txtContact.Text));
 
             if (isSuccess) { MessageBox.Show("Record updated for " + prop.FirstName + " " + prop.LastName, "UPDATE"); Clear(); }
-            else { MessageBox.Show("ERROR SAVING RECORD TO db_contacts", "ERROR"); }
+            else { MessageBox.Show("ERROR UPDATING RECORD IN db_contacts", "ERROR"); }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            // Delete()
+            SetProps(); // ensure all class propeties are set
+            DialogResult _res = MessageBox.Show("Are you sure you want to remove " + prop.FirstName + " " + prop.LastName + " from the database?", "DELETE", MessageBoxButtons.YesNo);
+
+            if (_res == DialogResult.Yes)
+            {
+                bool isSuccess = data.Delete(prop, Convert.ToInt32(txtContact.Text));
+
+                if (isSuccess) { MessageBox.Show(prop.FirstName + " " + prop.LastName + " deleted from database.", "DELETE"); Clear(); }
+                else { MessageBox.Show("ERROR DELETING RECORD FROM db_contacts", "ERROR"); }
+            }
+            else { return; }
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -87,12 +97,22 @@ namespace ContactApp
 
         private void txtFname_LostFocus(object sender, EventArgs e)
         {
-            // dynamic lookup by first name (last name required)
+            if (txtFname.Text.Length > 0 && !txtContact.ReadOnly)
+            {
+                DataTable dt = new DataTable();
+                dt = data.Select(txtFname.Text, txtLname.Text);
+                SetReturnValues(dt);
+            }
         }
 
         private void txtLname_LostFocus(object sender, EventArgs e)
         {
-            // dynamic lookup by last name (first name required)
+            if (txtLname.Text.Length > 0 && !txtContact.ReadOnly)
+            {
+                DataTable dt = new DataTable();
+                dt = data.Select(txtFname.Text, txtLname.Text);
+                SetReturnValues(dt);
+            }
         }
 
         // testing mouse hover for ToolTip functionality
@@ -107,6 +127,7 @@ namespace ContactApp
             if (txtContact.ReadOnly) { btnNext.Enabled = false; }
             else { btnNext.Enabled = true; }
         }
+
 
         // FORM METHODS
         // set properties
@@ -137,6 +158,7 @@ namespace ContactApp
                 {
                     string area; string phone;
                     // strongly typed values
+                    txtContact.Text = dr["contact_id"].ToString();
                     txtFname.Text = dr["first_name"].ToString();
                     txtLname.Text = dr["last_name"].ToString();
                     txtAddress.Text = dr["address"].ToString();
@@ -161,8 +183,8 @@ namespace ContactApp
                     txtContact.ReadOnly = true; // disable contactid field
                 }
             }
-            else if (dt.Rows.Count > 1) { MessageBox.Show("contactData.Select() returned more than 1 row from database", "ERROR"); Clear(); }
-            else { MessageBox.Show("Contact Id does not exist.", "ERROR"); Clear(); }
+            else if (dt.Rows.Count > 1) { MessageBox.Show("contactData.Select() returned more than 1 row from database", "ERROR"); }
+            else { MessageBox.Show("No related records found in database.", "ERROR"); Clear(); }
         }
 
         private void Clear()

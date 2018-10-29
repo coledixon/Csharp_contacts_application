@@ -14,12 +14,14 @@ namespace ContactApp.Classes
     {
         // INSTANTIATE CLASS(ES)
         contactProp prop = new contactProp(); // properties class
+        contactExt ext = new contactExt(); // method class
 
         // data connection
         static string dataconnstrng = ConfigurationManager.ConnectionStrings["connstrng"].ConnectionString;
 
-        // select data from db
+        // select data from db (overloaded)
         #region data select
+        // dynamic lookup for contactid
         public DataTable Select(int contact_id = 0)
         {
             DataTable dt = new DataTable();
@@ -29,6 +31,35 @@ namespace ContactApp.Classes
             {
                 string sql = "SELECT * FROM vcontact_data_all";
                 if (contact_id > 0) { sql = sql + string.Format(" WHERE contact_id = {0}", contact_id); }
+
+                SqlCommand cmd = new SqlCommand(sql, conn); // build query
+                SqlDataAdapter adp = new SqlDataAdapter(cmd);
+                conn.Open(); // open db connection
+                adp.Fill(dt); // populate virtual table
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                conn.Close(); // close db connection
+            }
+            return dt; // return datatable
+        }
+
+        // dynamic lookup by first / last name(s)
+        public DataTable Select(string f_name, string l_name)
+        {
+            DataTable dt = new DataTable();
+
+            SqlConnection conn = new SqlConnection(dataconnstrng);
+            try
+            {
+                var t = new Tuple<string, string>(f_name, l_name);
+
+                string sql = "SELECT * FROM vcontact_data_all";
+                sql = sql + t.Compare(f_name, l_name);
 
                 SqlCommand cmd = new SqlCommand(sql, conn); // build query
                 SqlDataAdapter adp = new SqlDataAdapter(cmd);
@@ -82,12 +113,6 @@ namespace ContactApp.Classes
 
                 int rows = cmd.ExecuteNonQuery();
                 isSuccess = (rows > 0) ? true : false; // similar logic to @@ROWCOUNT in sql
-
-                //if (isSuccess) // TO DO
-                //{
-                //    Select();
-                //}
-
             }
             catch (Exception ex)
             {
@@ -228,6 +253,28 @@ namespace ContactApp.Classes
                 conn.Close(); // close db connection
             }
             return contact_id;
+        }
+    }
+
+    // TUPLE COMPARISON FOR Select() OVERLOAD
+    static class CompareTuple
+    {
+        public static string Compare<T1, T2>(this Tuple<T1, T2> value, T1 v1, T2 v2)
+        {
+            string where = "";
+            if (!string.IsNullOrEmpty(value.Item1.ToString()) && string.IsNullOrEmpty(value.Item2.ToString()))
+            {
+                return where = string.Format(" WHERE first_name = '{0}'", value.Item1.ToString());
+            }
+            else if (string.IsNullOrEmpty(value.Item1.ToString()) && !string.IsNullOrEmpty(value.Item2.ToString()))
+            {
+                return where = string.Format(" WHERE last_name = '{0}'", value.Item2.ToString());
+            }
+            else if (!string.IsNullOrEmpty(value.Item1.ToString()) && !string.IsNullOrEmpty(value.Item2.ToString()))
+            {
+                return where = string.Format(" WHERE first_name = '{0}' AND last_name = '{1}'", value.Item1.ToString(), value.Item2.ToString());
+            }
+            else { return where; }
         }
     }
 }
