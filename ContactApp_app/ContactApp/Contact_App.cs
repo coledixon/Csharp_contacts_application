@@ -45,6 +45,7 @@ namespace ContactApp
 
             txtContact.Text = data.GetNextContactId().ToString();
             txtContact.ReadOnly = true; // set to readonly
+            _newRecord = true; // flag as new record
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -61,7 +62,7 @@ namespace ContactApp
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (_dirty._isDirty)
+            if (_dirty._isDirty &&!_newRecord)
             {
                 SetProps(); // ensure all class propeties are set
                 bool isSuccess = data.Update(prop, Convert.ToInt32(txtContact.Text));
@@ -98,12 +99,16 @@ namespace ContactApp
 
                 if (_res == DialogResult.Yes)
                 {
-                    bool isSuccess = data.Update(prop, Convert.ToInt32(txtContact.Text));
-
-                    if (isSuccess) { MessageBox.Show("Record updated for " + prop.FirstName + " " + prop.LastName, "UPDATE"); Clear(); }
-                    else { MessageBox.Show("ERROR UPDATING RECORD IN db_contacts", "ERROR"); }
+                    if (_newRecord) // insert
+                    {
+                        btnAdd_Click(btnClear, null);
+                    }
+                    else // update
+                    {
+                        btnUpdate_Click(btnClear, null);
+                    }
                 }
-                else { return; }
+                else { Clear(); }
             }
             else
             {
@@ -115,23 +120,6 @@ namespace ContactApp
         #endregion
 
         #region focus events
-        private void Form_Closing(object sender, FormClosingEventArgs e)
-        {
-            if (_dirty._isDirty)
-            {
-                DialogResult _res = MessageBox.Show("Save changes before closing?", "CLEAR", MessageBoxButtons.YesNo);
-
-                if (_res == DialogResult.Yes)
-                {
-                    bool isSuccess = data.Update(prop, Convert.ToInt32(txtContact.Text));
-
-                    if (isSuccess) { MessageBox.Show("Record updated for " + prop.FirstName + " " + prop.LastName, "UPDATE"); Clear(); }
-                    else { MessageBox.Show("ERROR UPDATING RECORD IN db_contacts", "ERROR"); }
-                }
-                else { return; }
-            }
-        }
-
         private void txtContact_LostFocus(object sender, EventArgs e)
         {
             if (Regex.IsMatch(txtContact.Text, @"[a-zA-Z]+$")) { MessageBox.Show("Contact Id entered is not numeric.", "ERROR"); Clear(); return; }
@@ -141,6 +129,7 @@ namespace ContactApp
             {
                 DataTable dt = new DataTable();
                 dt = data.Select(Convert.ToInt32(txtContact.Text));
+                _newRecord = false;
                 SetReturnValues(dt);
             }
         }
@@ -151,6 +140,7 @@ namespace ContactApp
             {
                 DataTable dt = new DataTable();
                 dt = data.Select(txtFname.Text, txtLname.Text);
+                _newRecord = false;
                 SetReturnValues(dt);
             }
         }
@@ -161,7 +151,31 @@ namespace ContactApp
             {
                 DataTable dt = new DataTable();
                 dt = data.Select(txtFname.Text, txtLname.Text);
+                _newRecord = false;
                 SetReturnValues(dt);
+            }
+        }
+        #endregion
+
+        // form close
+        private void Form_Closing(object sender, FormClosingEventArgs e)
+        {
+            if (_dirty._isDirty)
+            {
+                DialogResult _res = MessageBox.Show("Save changes before closing?", "CLEAR", MessageBoxButtons.YesNo);
+
+                if (_res == DialogResult.Yes)
+                {
+                    if (_newRecord) // insert
+                    {
+                        btnAdd_Click(null, null);
+                    }
+                    else // update
+                    {
+                        btnUpdate_Click(null, null);
+                    }
+                }
+                else { return; }
             }
         }
 
@@ -170,7 +184,6 @@ namespace ContactApp
         {
             // ToolTip ??
         }
-        #endregion
 
         private void txtContact_ReadOnlyChanged(object sender, EventArgs e)
         {

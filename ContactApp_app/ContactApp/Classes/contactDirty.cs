@@ -25,9 +25,7 @@ namespace ContactApp.Classes
             foreach (Control c in coll)
             {
                 if (c is TextBox)
-                {
                     (c as TextBox).TextChanged += new EventHandler(DirtyState_TextChanged);
-                }
             }
         }
 
