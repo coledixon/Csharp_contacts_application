@@ -7,4 +7,4 @@
 
 // CONFIG 
 
-https://github.com/coledixon/Csharp_contacts_application.wiki.git
+https://github.com/coledixon/Csharp_contacts_application/wiki/C%23-Contact-Application-wiki
