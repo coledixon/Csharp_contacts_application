@@ -141,21 +141,19 @@ GO
 			BEGIN
 				SELECT @retval = -1, @errmess = 'ERROR DELETING RECORD(S) IN trDEL_vcontact_data_all'
 				GOTO ERROR
-
-			ROLLBACK TRAN
 			END
 			ELSE BEGIN
 				SELECT @retval = 1 -- assume success
 				GOTO SPEND
-
-			COMMIT TRAN
 			END
 
 		SPEND:
+			COMMIT TRAN -- finalize transaction
 			SELECT 'SUCCESS', @retval retval
 			RETURN
 
 		ERROR:
+			ROLLBACK TRAN -- undo transaction
 			SELECT 'FAIL', @retval retval, @errmess err
 			RETURN
 	END
