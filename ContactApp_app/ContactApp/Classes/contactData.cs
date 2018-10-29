@@ -14,7 +14,6 @@ namespace ContactApp.Classes
     {
         // INSTANTIATE CLASS(ES)
         contactProp prop = new contactProp(); // properties class
-        contactExt ext = new contactExt(); // method class
 
         // data connection
         static string dataconnstrng = ConfigurationManager.ConnectionStrings["connstrng"].ConnectionString;
@@ -262,17 +261,17 @@ namespace ContactApp.Classes
         public static string Compare<T1, T2>(this Tuple<T1, T2> value, T1 v1, T2 v2)
         {
             string where = "";
-            if (!string.IsNullOrEmpty(value.Item1.ToString()) && string.IsNullOrEmpty(value.Item2.ToString()))
+            if (!string.IsNullOrEmpty(v1.ToString()) && string.IsNullOrEmpty(v2.ToString()))
             {
-                return where = string.Format(" WHERE first_name = '{0}'", value.Item1.ToString());
+                return where = string.Format(" WHERE first_name = '{0}'", v1.ToString());
             }
-            else if (string.IsNullOrEmpty(value.Item1.ToString()) && !string.IsNullOrEmpty(value.Item2.ToString()))
+            else if (string.IsNullOrEmpty(v1.ToString()) && !string.IsNullOrEmpty(v2.ToString()))
             {
-                return where = string.Format(" WHERE last_name = '{0}'", value.Item2.ToString());
+                return where = string.Format(" WHERE last_name = '{0}'", v2.ToString());
             }
-            else if (!string.IsNullOrEmpty(value.Item1.ToString()) && !string.IsNullOrEmpty(value.Item2.ToString()))
+            else if (!string.IsNullOrEmpty(v1.ToString()) && !string.IsNullOrEmpty(v2.ToString()))
             {
-                return where = string.Format(" WHERE first_name = '{0}' AND last_name = '{1}'", value.Item1.ToString(), value.Item2.ToString());
+                return where = string.Format(" WHERE first_name = '{0}' AND last_name = '{1}'", v1.ToString(), v2.ToString());
             }
             else { return where; }
         }
