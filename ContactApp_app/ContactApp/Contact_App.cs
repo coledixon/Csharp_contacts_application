@@ -33,7 +33,7 @@ namespace ContactApp
         contactExt ext = new contactExt(); // method class
         contactProp prop = new contactProp(); // properties class
 
-        // FORM EVENTS
+        // BUTTON EVENTS
         #region button events
         private void btnNext_Click(object sender, EventArgs e)
         {
@@ -62,7 +62,7 @@ namespace ContactApp
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (_dirty._isDirty &&!_newRecord)
+            if (_dirty._isDirty && !_newRecord)
             {
                 SetProps(); // ensure all class propeties are set
                 bool isSuccess = data.Update(prop, Convert.ToInt32(txtContact.Text));
@@ -97,17 +97,7 @@ namespace ContactApp
                 // form clear functionality
                 DialogResult _res = MessageBox.Show("Save changes before clearing?", "CLEAR", MessageBoxButtons.YesNo);
 
-                if (_res == DialogResult.Yes)
-                {
-                    if (_newRecord) // insert
-                    {
-                        btnAdd_Click(btnClear, null);
-                    }
-                    else // update
-                    {
-                        btnUpdate_Click(btnClear, null);
-                    }
-                }
+                if (_res == DialogResult.Yes) { Save(); }
                 else { Clear(); }
             }
             else
@@ -119,6 +109,7 @@ namespace ContactApp
         }
         #endregion
 
+        // FOCUS EVENTS
         #region focus events
         private void txtContact_LostFocus(object sender, EventArgs e)
         {
@@ -129,7 +120,7 @@ namespace ContactApp
             {
                 DataTable dt = new DataTable();
                 dt = data.Select(Convert.ToInt32(txtContact.Text));
-                _newRecord = false;
+                _newRecord = false; // loaded record
                 SetReturnValues(dt);
             }
         }
@@ -140,7 +131,7 @@ namespace ContactApp
             {
                 DataTable dt = new DataTable();
                 dt = data.Select(txtFname.Text, txtLname.Text);
-                _newRecord = false;
+                _newRecord = false; // loaded record
                 SetReturnValues(dt);
             }
         }
@@ -151,30 +142,22 @@ namespace ContactApp
             {
                 DataTable dt = new DataTable();
                 dt = data.Select(txtFname.Text, txtLname.Text);
-                _newRecord = false;
+                _newRecord = false; // loaded record
                 SetReturnValues(dt);
             }
         }
         #endregion
 
-        // form close
+
+        // FORM EVENTS
+        #region form events
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
             if (_dirty._isDirty)
             {
                 DialogResult _res = MessageBox.Show("Save changes before closing?", "CLEAR", MessageBoxButtons.YesNo);
 
-                if (_res == DialogResult.Yes)
-                {
-                    if (_newRecord) // insert
-                    {
-                        btnAdd_Click(null, null);
-                    }
-                    else // update
-                    {
-                        btnUpdate_Click(null, null);
-                    }
-                }
+                if (_res == DialogResult.Yes) { Save(); }
                 else { return; }
             }
         }
@@ -190,9 +173,10 @@ namespace ContactApp
             if (txtContact.ReadOnly) { btnNext.Enabled = false; }
             else { btnNext.Enabled = true; }
         }
-
+        #endregion
 
         // FORM METHODS
+        #region form methods
         // set properties
         private void SetProps()
         {
@@ -250,6 +234,12 @@ namespace ContactApp
             else { MessageBox.Show("No related records found in database.", "ERROR"); Clear(); }
         }
 
+        private void Save()
+        {
+            if (_newRecord) { btnAdd_Click(null, null); } // insert
+            else { btnUpdate_Click(null, null); } // update
+        }
+
         private void Clear()
         {
             foreach (Control ctl in this.Controls) // clear all text elements on gen'in new contactid
@@ -260,5 +250,6 @@ namespace ContactApp
             txtContact.ReadOnly = false; // reset readonly
             _dirty.SetClean();
         }
+        #endregion
     }
 }
