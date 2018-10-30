@@ -230,7 +230,7 @@ namespace ContactApp
                     txtContact.ReadOnly = true; // disable contactid field
                 }
             }
-            else if (dt.Rows.Count > 1) { MessageBox.Show("contactData.Select() returned more than 1 row from database", "ERROR"); }
+            else if (dt.Rows.Count > 1) { MessageBox.Show("Multiple matching records found. Try refining query by adding a FIRST or LAST name parameter.", "RETURN DATA"); }
             else { MessageBox.Show("No related records found in database.", "ERROR"); Clear(); }
         }
 
