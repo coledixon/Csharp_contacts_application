@@ -1,0 +1,9 @@
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\bin\Release\ContactApp.exe.config
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\bin\Release\ContactApp.exe
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\bin\Release\ContactApp.pdb
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Release\ContactApp.Contact_App.resources
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Release\ContactApp.Properties.Resources.resources
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Release\ContactApp.csproj.GenerateResource.cache
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Release\ContactApp.csproj.CoreCompileInputs.cache
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Release\ContactApp.exe
+C:\Users\Cole Dixon\projects\Csharp_contacts_application\ContactApp_app\ContactApp\obj\Release\ContactApp.pdb
