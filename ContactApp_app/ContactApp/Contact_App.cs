@@ -251,5 +251,6 @@ namespace ContactApp
             _dirty.SetClean();
         }
         #endregion
+
     }
 }
