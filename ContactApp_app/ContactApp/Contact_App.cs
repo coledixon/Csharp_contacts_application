@@ -1,4 +1,5 @@
-﻿using ContactApp.Classes;
+﻿using ContactApp.Controllers;
+using ContactApp.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -48,10 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\contactData.cs" />
-    <Compile Include="Classes\contactDirty.cs" />
-    <Compile Include="Classes\contactExt.cs" />
-    <Compile Include="Classes\contactProp.cs" />
+    <Compile Include="Controllers\contactData.cs" />
+    <Compile Include="Controllers\contactDirty.cs" />
+    <Compile Include="Controllers\contactExt.cs" />
+    <Compile Include="Models\contactProp.cs" />
     <Compile Include="Contact_App.cs">
       <SubType>Form</SubType>
     </Compile>

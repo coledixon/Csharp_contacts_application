@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ContactApp.Classes
+namespace ContactApp.Models
 {
     class contactProp
     {

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ContactApp.Classes
+namespace ContactApp.Controllers
 {
     class contactExt
     {
