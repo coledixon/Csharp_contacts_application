@@ -1,0 +1,4 @@
+{
+    "git.confirmEmptyCommits": false,
+    "git.promptToSaveFilesBeforeCommit": false
+}
