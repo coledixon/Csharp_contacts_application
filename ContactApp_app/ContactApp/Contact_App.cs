@@ -187,7 +187,7 @@ namespace ContactApp
             prop.Address = txtAddress.Text;
             prop.City = txtCity.Text;
             prop.State = txtState.Text.ToUpper();
-            prop.Zip = Convert.ToInt32(txtZip.Text);
+            prop.Zip = (string.IsNullOrEmpty(txtZip.Text)) ? 0 : Convert.ToInt32(txtZip.Text); // CD: fixed issue of converting to int on SAVE of empty form
             prop.PhoneHome = ext.parsePhoneNumber(txtAreaH.Text, txtPhoneH.Text);
             prop.PhoneCell = ext.parsePhoneNumber(txtAreaC.Text, txtPhoneC.Text);
             prop.PhoneWork = ext.parsePhoneNumber(txtAreaW.Text, txtPhoneW.Text);
