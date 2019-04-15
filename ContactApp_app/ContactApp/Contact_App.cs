@@ -16,11 +16,25 @@ namespace ContactApp
     public partial class Contact_App : Form
     {
         bool _newRecord; // flag if new record
+
+        // refs to external controller(s) / model(s)
         private contactDirty _dirty;
+        private contactData data;
+        private contactExt ext;
+        private contactProp prop;
 
         public Contact_App()
         {
             InitializeComponent();
+            InstantiateObjects();
+        }
+
+        // INSTANTIATE CLASS(ES)
+        public void InstantiateObjects()
+        {
+            data = new contactData(); // data  class
+            ext = new contactExt(); // method class
+            prop = new contactProp(); // properties class
         }
 
         private void Form_Load(object sender, EventArgs e)
@@ -28,11 +42,6 @@ namespace ContactApp
             _dirty = new contactDirty(this);
             _dirty.SetClean();
         }
-
-        // INSTANTIATE CLASS(ES)
-        contactData data = new contactData(); // data  class
-        contactExt ext = new contactExt(); // method class
-        contactProp prop = new contactProp(); // properties class
 
         // BUTTON EVENTS
         #region button events
